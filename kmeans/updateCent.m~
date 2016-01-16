@@ -1,0 +1,8 @@
+function [] = updateCent(X, cent_init, cent_num)
+% compute new centroids using cent_init.
+% cent_init is array of centroid assignments
+% for samples in X
+
+
+
+end

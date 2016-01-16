@@ -1,0 +1,21 @@
+function [index] = findCent(X, cent)
+% classify data to nearest centroids
+% X is dataset, cent contains coordinates
+% of the centroids
+% returns index for each sample in X
+
+m = size(X,1);
+num_cent = size(cent, 1);
+index = zeros(m,1);
+
+for i=1:m
+   min = (X(i,:)-centroids(j,:))*(X(i,:)-centroids(j,:))';
+   ind = 1;
+   for j=1:num_cent
+       
+   end
+   index(i) = ind;
+end
+
+
+end
