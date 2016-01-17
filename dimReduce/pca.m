@@ -29,4 +29,14 @@ for i = 1:size(X,1)
     X_red(i,(1:N)) = X(i,:)*U(:,(1:N));
 end
 
+% now project back to the original space
+% to obtain approximation of X using X_red
 
+X_rec = zeros(size(X_red,1), size(U,1));
+
+for i = 1:size(Z,1)
+    X_rec(i,:) = Z(i,:)*U(:,1:K)';
+end
+
+fprintf('Approximation data from reduced data:\n');
+disp(X_rec);
