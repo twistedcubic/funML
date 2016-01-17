@@ -8,11 +8,6 @@
 % load data
 X = load('data.txt');
 
-% center and normalize data (along columns)
-% bsxfun operates minus & rdivide for each row
-X = bsxfun(@minus, X, mean(X));
-X = bsxfun(@rdivide, X, std(X));
-
 % number of centroids
 cent_num = 5;
 % number of iterations
