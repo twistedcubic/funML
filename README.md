@@ -1,5 +1,5 @@
-#Machine Learning Algorithms
-This is a repository of select machine learning algorithms. Written in Matlab (will include Python in future commits).
+## Machine Learning Algorithms
+This is a repository of select machine learning algorithms. Written in python and Matlab.
 
 Algorithms so far:
 
@@ -11,3 +11,4 @@ Algorithms so far:
 - A simple neural network
 - K-means clustering
 - Principal component analysis
+- A multilayer perceptron
