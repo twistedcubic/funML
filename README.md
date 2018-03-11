@@ -12,3 +12,4 @@ Algorithms so far:
 - K-means clustering
 - Principal component analysis
 - A multilayer perceptron
+- Create word embeddings
