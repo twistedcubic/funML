@@ -8,9 +8,9 @@ Algorithms so far:
 - Descent using Newton's method/direction
 - Conjugate gradient (iterative version)
 - Backtracking line search
-- A simple neural network
 - K-means clustering
 - Principal component analysis
 - A multilayer perceptron
 - Create word embeddings
-- MNIST training
+- MNIST training with MLP
+- A CNN model
