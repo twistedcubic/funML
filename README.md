@@ -1,5 +1,5 @@
 ## Machine Learning Algorithms
-This is a repository of select machine learning algorithms. Written in python and Matlab.
+This is a repository of select machine learning algorithms. Written in Python and Matlab, with frameworks including Keras, Tensorflow, and PyTorch.
 
 Algorithms so far:
 
@@ -10,7 +10,8 @@ Algorithms so far:
 - Backtracking line search
 - K-means clustering
 - Principal component analysis
+- A CNN model
 - A multilayer perceptron
 - Create word embeddings
 - MNIST training with MLP
-- A CNN model
+- A recurrent + CNN model classifying text

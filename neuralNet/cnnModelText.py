@@ -8,7 +8,7 @@ layer to encode the input characters.
 import torch
 import torch.optim as optim
 import torch.nn as nn
-import torch.functional as F
+import torch.nn.functional as F
 
 kernel_sz = 3
 embed_dim = 128
