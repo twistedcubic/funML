@@ -24,7 +24,7 @@ conv_lin_sz = embed_dim * conv_channels_out
 
 class RecConv(nn.Module):
     def __init__(self):
-        super.__init__(RecConv, self)
+        super(RecConv, self).__init__()
         #first use embedding layer to encode tokens
         self.embed = nn.Embedding(feature_dim, embed_dim)
         #convolution followed by pooling layer to reduce dimension, then

@@ -26,7 +26,7 @@ train_steps = 1000
 
 class MyCNN(nn.Model):
     def __init__(self, input_dim, out_dim):
-        super.__init__(MyCNN, self)
+        super(MyCNN, self).__init__()
         self.embed = nn.Embedding(input_dim, embed_dim)
         self.conv = nn.Conv1d(conv_channel_in, conv_channel_out, conv_kernel_sz)
         self.pool = nn.MaxPool1d(pool_kernel_sz)
