@@ -31,10 +31,12 @@ class RecConv(nn.Module):
         #recurrent layer to retain sequential data.
         self.conv = nn.Conv1d(conv_channels_in, conv_channels_out, conv_kern_sz)
         self.pool = nn.MaxPool1d(pool_kern_sz)
-        self.lstm = nn.LSTM(conv_lin_sz, hidden_dim)        
+        #batch_first since by default seq_len is first dim
+        self.lstm = nn.LSTM(conv_lin_sz, hidden_dim, batch_first=True)  
+        self.hidden = init_hidden(hidden_dim)
         self.lin = nn.Linear(hidden_dim, output_dim)
         self.softmax = nn.LogSoftmax(dim=1)
-
+        
     #Args: x is batched sequences of integers, each sequence is a sentence,
     #each integer represents a token.
     def forward(self, x):
@@ -43,9 +45,13 @@ class RecConv(nn.Module):
         x = self.pool(x)
         #need to reshape x at runtime, since don't know shape at model initialization.
         x = x.view(-1, conv_lin_sz)
-        x = self.lstm(x)
+        x, self.hidden = self.lstm(x, self.hidden)
         x = self.lin(x)
         return self.softmax(x)
+
+    def init_hidden(self, hidden_dim):
+        return (torch.zeros(1, 1, hidden_dim),
+                torch.zeros(1, 1, hidden_dim))
 
 model = RecConv()
 opt = optim.SGD(model.parameters(), lr = 0.005, momentum = 0.9)
