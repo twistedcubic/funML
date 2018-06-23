@@ -67,6 +67,16 @@ def create_maps(text):
     index_to_word = {i : w for (i, w) in enumerate(text_set)}
     return word_to_index, index_to_word
 
+#interpret resulting log softmax produced by model as a word
+def prob_to_word(prob):
+    #normalize into probabilities
+    prob = prob / torch.sum(prob)
+    prob = prob.data.numpy()
+    #draw 1 time from the distribution prob
+    pred = np.random.multinomial(1, prob)
+    index = np.argmax(pred)
+    return index_to_word(index)
+    
 '''
 Args:
 -batches of list of tokens in training text.
@@ -83,10 +93,40 @@ def process_and_train(text):
             if j >= MAX_SEN_LEN:
                 break
             try:
-                data[j][i] = word_to_index(token)
+                data[j, i] = word_to_index(token)
             except KeyError:
                 pass
     train(torch.FloatTensor(data))
-    
-    
-    
+
+#########################
+
+'''
+Another way to process data, to create pairs of fixed-length
+snippets and the character that follows.
+Args: 
+-text: as list of list of tokens.
+Returns:
+-batches of pairs of fixed-length sentence snippet and the immediately-following
+character
+'''    
+def process_data2(text):
+    sen_max = 10
+    sen_data = []
+    char_data = []
+    for sen in text:
+        sen_len = len(sen)
+        sen_ar = []
+        char_ar = []
+        for i in range(0, sen_len-sen_max):
+            sen_ar.append(sen[i : i+sen_max])
+            char_ar.append(sen[i + sen_max])
+        sen_data.extend(sen_ar)
+        char_data.extend(char_ar)
+    #turn words into indices
+    sen_index_data = np.zeros((len(sen_data), sen_max), dtype=np.int32)
+    char_index_data = np.zeros((len(char_data)), dtype=np.int32)
+    for i, sen in enumerate(sen_data):
+        for j, w in enumerate(sen):
+            sen_index_data[i, j] = word_to_index(w) 
+        char_index_data[i] = word_to_index(char_data[i]) 
+    return sen_index_data, char_index_data
