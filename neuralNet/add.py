@@ -3,6 +3,7 @@
 Sequence-to-sequence model to learn addition of two-digit 
 positive natural numbers.
 '''
+import torch
 import torch.nn as nn
 import torch.functional as F
 import numpy as np
@@ -34,3 +35,5 @@ class AddNet(nn.Module):
         ar = np.zeros(len(digits), 10)
         ar[np.arange(len(digits)), digits] = 1
         return ar
+
+
