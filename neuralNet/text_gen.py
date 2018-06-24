@@ -123,8 +123,8 @@ def process_data2(text):
         sen_data.extend(sen_ar)
         char_data.extend(char_ar)
     #turn words into indices
-    sen_index_data = np.zeros((len(sen_data), sen_max), dtype=np.int32)
-    char_index_data = np.zeros((len(char_data)), dtype=np.int32)
+    sen_index_data = np.zeros((len(sen_data), sen_max), dtype='int32')
+    char_index_data = np.zeros((len(char_data)), dtype='int32')
     for i, sen in enumerate(sen_data):
         for j, w in enumerate(sen):
             sen_index_data[i, j] = word_to_index(w) 

@@ -48,16 +48,16 @@ class SNLI0(nn.module):
         return out
     
 '''
-Use pretrained embeddings and and LSTM to combine vectors.
+Use pretrained embeddings, e.g. GLOVE, and and LSTM to combine vectors.
 '''
 class SNLI1(nn.module):
     
-    def __init__(self, embed_in_sz, embed_dim, hidden_dim):
+    def __init__(self, embed_dim, hidden_dim, embed_weights):
         super(SNLI0, self).__init__()
         self.embed_dim = embed_dim
         self.rnn_hidden_dim = hidden_dim
-        #trainable embeddings
-        self.embed = nn.Embedding(embed_in_sz, embed_dim)
+        #pretrained embeddings, weights frozen by default
+        self.embed = nn.Embedding.from_pretrained(embed_weights)
         self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True)
         #2 times because concatenating hyp and text
         self.lin1 = nn.Linear(2 * hidden_dim, LIN_DIM)
@@ -90,3 +90,19 @@ class SNLI1(nn.module):
     def init_hidden(self):
         return (torch.zeros(1, 1, self.rnn_hidden_dim),
                 torch.zeros(1, 1, self.rnn_hidden_dim))
+
+'''
+load pretrained vectors, each line of form "word v1 v2 ..."
+Returns:
+-dictionary of word key and np embedding vector.
+'''
+def load_pretrained(path):
+    word_to_vec = {}
+    with open(path, "r") as file:
+        for line in file:
+            line_ar = line.split()
+            word = line_ar[0]
+            embed = np.asarray(line_ar[1:], dtype='float32')
+            word_to_vec[word] = embed
+    return word_to_vec
+
