@@ -11,6 +11,7 @@ latent vectors.
 import torch
 import torch.nn as nn
 import torch.functional as F
+import torch.optim as optim
 
 class VaeEnc(nn.module):
     def __init__(self, nin, nhidden):
@@ -31,7 +32,19 @@ class VaeDec(nn.module):
     def forward(self, x):
         x = F.sigmoid(self.lin(x))
         return x
-
+'''
+loss function containing reconstruction error and KL divergence.
+Args:actual data.
+predicted data
+mean and var
+'''
+def vae_loss(actual, predicted, mean, var):
+    #maximizing data log likelihood given trained probability parameters
+    #is same as minimizing binary cross entropy
+    reconstruction = F.binary_cross_entropy(actual, predicted)
+    kld = 0.5*torch.sum(1 + var - torch.pow(mean, 2) - torch.exp(var))
+    return reconstruction - kld
+    
 #Reparametrization trick.
 #reparametrize based on data mean and variance.
 def reparametrize(mean, var):
@@ -49,3 +62,17 @@ class Vae(nn.module):
         x = reparametrize(mean, var)
         x = self.dec(x)
         return x, mean, var
+
+model = Vae(200, 20, 200)
+opt = optim.Adam(model.parameters())
+
+def train(x):
+    #set to training mode
+    model.train()
+    opt.zero_grad()
+    loss = 0
+    pred, mean, var = model(x)
+    loss = vae_loss(pred, x, mean, var)
+    loss.backward()
+    opt.step()
+    
