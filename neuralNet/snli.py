@@ -1,6 +1,6 @@
 
 '''
-Nets to classify snli, of increasing complexity.
+Various Nets to classify snli.
 
 '''
 
@@ -48,7 +48,7 @@ class SNLI0(nn.module):
         return out
     
 '''
-Use pretrained embeddings, e.g. GLOVE, and and LSTM to combine vectors.
+Use pretrained embeddings, e.g. GLOVE, and LSTM to combine vectors.
 '''
 class SNLI1(nn.module):
     
@@ -81,7 +81,7 @@ class SNLI1(nn.module):
         hyp_embed, self.hyp_hidden = self.lstm(hyp_embed, self.hyp_hidden)
         text_embed, self.text_hidden = self.lstm(text_embed, self.text_hidden)
         #concatenate hyp and text
-        combined = torch.cat((hyp_embed, text_embed))
+        combined = torch.cat((hyp_embed, text_embed), dim=1)
         combined = F.relu(self.lin1(combined))
         #softmax over the three categories: E, N, C
         out = self.softmax(out)
