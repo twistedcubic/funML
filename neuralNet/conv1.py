@@ -56,3 +56,9 @@ class Conv2(nn.module):
         
         return e, n
         
+def Conv3(nn.Module):
+    def __init__(self, n_hidden, embed_dim):
+        super__(Conv3, self).__init__()
+        self.w = nn.Parameter(torch.zeros([embed_dim, n_hidden], dtype=torch.float32))
+    def forward(self, m, e):        
+        e = F.bmm(F.bmm(torch.t(m), e), self.w)
