@@ -27,7 +27,7 @@ class Conv1(nn.Module):
         m = F.relu(self.lin(m))
         return m
         
-class Conv2(nn.module):
+class Conv2(nn.Module):
 
     def __init__(self, n_n_embed, n_e_embed, n_nodes, n_edges):
         super(Conv2, self).__init__()
@@ -41,20 +41,43 @@ class Conv2(nn.module):
         #pool
         
     def init_m(self, n_nodes, n_edges):
+        #
         return torch.ones(n_nodes, n_edges)
 
     def init_w(self, n1, n2):
         return torch.randn(n1, n2)
 
     def forward(self, e, n, m):
-        e = F.bmm(F.bmm(m, e), self.w_e)
-        n = F.bmm(F.bmm(torch.t(m), n), self.w_n)
+        e = torch.bmm(torch.bmm(m, e), self.w_e)
+        n = torch.bmm(torch.bmm(torch.t(m), n), self.w_n)
         #e = F.relu(self.lin_e(e))
         #n = F.relu(self.lin_n(n))
-        e = F.bmm(F.bmm(m, e), self.w_e2)
-        n = F.bmm(F.bmm(torch.t(m), n), self.w_n2)
+        e = torch.bmm(torch.bmm(m, e), self.w_e2)
+        n = torch.bmm(torch.bmm(torch.t(m), n), self.w_n2)
         
         return e, n
+
+#word embed dimension
+EMBED_DIM = 50
+
+class Conv3(nn.Module):
+    def __init__(self, x, n_features):
+        super(Conv3, self).__init__()
+        #w1 should have dimension (embed_dim, n_features)
+        self.w1 = nn.Parameter(nn.randn(EMBED_DIM, n_features))
+        self.n_features = n_features
+        self.w2 = nn.Parameter(nn.randn(EMBED_DIM, 1))
+        
+    #A has dim (batch, n_nodes, n_nodes), and X has dim (batch, n_nodes, embed_dim)
+    def forward(self, A, X ):
+        batch_sz = A.size(0)
+        w1 = self.w1.unsqueeze(0).expand(batch_sz, EMBED_DIM, n_features)
+    
+        x = torch.bmm(torch.bmm(A, X), w1)
+        w2 = self.w2.unsqueeze(0).expand(batch_sz, EMBED_DIM, 1)
+        x = torch.bmm(x, w2)
+        return x
+        
         
 def Conv3(nn.Module):
     def __init__(self, n_hidden, embed_dim):
